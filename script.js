@@ -9,6 +9,7 @@ let Engine = Matter.Engine,
 	Constraint = Matter.Constraint,
 	Events = Matter.Events,
 	MouseConstraint = Matter.MouseConstraint,
+	Query = Matter.Query,
 	Mouse = Matter.Mouse;
 
 // create an engine
@@ -20,8 +21,8 @@ let render = Render.create({
     engine: engine,
     options: {
 	  wireframes: false,
-	  width: 1400,
-	  height: 800
+	  width: window.innerWidth,
+	  height: window.innerHeight
     }
 });
 
@@ -29,7 +30,7 @@ let render = Render.create({
 let mouse = Mouse.create(render.canvas)
 let	mouseConstraint = MouseConstraint.create(engine, {
 	mouse: mouse,
-	collisionFilter: 0,	
+	//collisionFilter: 0,	
 	constraint: {
 		stiffness: 0.0001,
 		render: {
@@ -39,7 +40,7 @@ let	mouseConstraint = MouseConstraint.create(engine, {
 });
 World.add(engine.world, mouseConstraint);
 
-//keyboard input
+//add keyboard input
 const keys = [];
 document.onkeydown = event => {
   keys[event.keyCode] = true;
@@ -52,19 +53,23 @@ document.onkeyup = event => {
 engine.world.gravity.x = 0;
 engine.world.gravity.y = 0;
 
+//declares deck
 let deck = [{
 	suit: "",
 	value: 0,
 	onBoard: false,
 	asset: null,
 }]
-for (let i = 1; i < 13; i++) {
+
+//passes values and bodies for the deck
+for (let i = 1; i < 14; i++) {
 	deck.push({
 		suit: "spade",
 		value: i+1,
 		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			collisionFilter: i,
+			//collisionFilter: i,
 			inertia: Infinity,
+			onBoard: false,
 			render: {
 				fillStyle: "green",
 				lineWidth: 3,
@@ -73,13 +78,14 @@ for (let i = 1; i < 13; i++) {
 		})
 	})
 }
-for (let i = 1; i < 13; i++) {
+for (let i = 1; i < 14; i++) {
 	deck.push({
 		suit: "club",
 		value: i+1,
 		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			collisionFilter: i+13,
+			//collisionFilter: i+13,
 			inertia: Infinity,
+			onBoard: false,
 			render: {
 				fillStyle: "green",
 				lineWidth: 3,
@@ -88,13 +94,14 @@ for (let i = 1; i < 13; i++) {
 		})
 	})
 }
-for (let i = 1; i < 13; i++) {
+for (let i = 1; i < 14; i++) {
 	deck.push({
 		suit: "heart",
 		value: i+1,
 		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			collisionFilter: i+26,
+			//collisionFilter: i+26,
 			inertia: Infinity,
+			onBoard: false,
 			render: {
 				fillStyle: "green",
 				lineWidth: 3,
@@ -103,13 +110,14 @@ for (let i = 1; i < 13; i++) {
 		})
 	})
 }
-for (let i = 1; i < 13; i++) {
+for (let i = 1; i < 14; i++) {
 	deck.push({
 		suit: "diamond",
 		value: i+1,
 		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			collisionFilter: i+39,
+			//collisionFilter: i+39,
 			inertia: Infinity,
+			onBoard: false,
 			render: {
 				fillStyle: "green",
 				lineWidth: 1.5,
@@ -118,8 +126,36 @@ for (let i = 1; i < 13; i++) {
 		})
 	})
 }
-for (let i = 1; i < deck.length; i++) {
-	World.add(engine.world, deck[i].asset)
+
+//removes blank card
+deck.splice(0, 1);
+
+//shuffles the deck
+let counter
+let counterArr = [];
+let counterBool = false;
+let shuffledDeck = [];
+
+for (let i = 0; i < deck.length; i++) {
+	counter = Math.floor(Math.random() * Math.floor(deck.length));
+	for (let x = 0; x < counterArr.length; x++) {
+		if (counterBool) {
+			x+100;
+			counterBool = false;
+		}
+		if (counter === counterArr[i]) {
+			counterBool = true;
+		}
+	}
+	if (!counterBool) {
+		counterArr.push(counter);
+		shuffledDeck.push(deck[counter]);
+	}
+}
+
+//adds the deck to the world
+for (let i = 0; i < shuffledDeck.length; i++) {
+	World.add(engine.world, shuffledDeck[i].asset);
 }
 
 // keep the mouse in sync with rendering
@@ -128,12 +164,41 @@ render.mouse = mouse;
 // fit the render viewport to the scene
 Render.lookAt(render, {
 	min: { x: 0, y: 0 },
-	max: { x: 1400, y: 800 }
+	max: { x: window.innerWidth, y: window.innerHeight }
 });
 
+///variables
+//mouse position object
+let mousePos = {
+	xPos: 0,
+	yPos: 0,
+};
+let hoverCard;
+
+//animation loop
+function cycle() {
+
+	//stores mouse position
+	document.onmousemove = event => {
+		mousePos.xPos = event.clientX;
+		mousePos.yPos = event.clientY;
+	};
+	
+
+	requestAnimationFrame(cycle)
+}
+requestAnimationFrame(cycle)
+
 Events.on(mouseConstraint, "mousedown", function (event) {
-	console.log("REEEEE");
+	console.log("hello")
 })
+Events.on(mouseConstraint, "mousemove", function (event) {
+	hoverCard = Matter.Query.point(engine.world, {
+		x: mousePos.xPos,
+		y: mousePos.yPos
+	});
+	console.log(hoverCard);
+}) 
 
 // run the engine
 Engine.run(engine);
