@@ -30,11 +30,13 @@ let render = Render.create({
 let mouse = Mouse.create(render.canvas)
 let	mouseConstraint = MouseConstraint.create(engine, {
 	mouse: mouse,
-	//collisionFilter: 0,	
+	collisionFilter: {
+		group: 1
+	},	
 	constraint: {
 		stiffness: 0.0001,
 		render: {
-			visible: true
+			visible: false
 		}
 	}
 });
@@ -67,7 +69,9 @@ for (let i = 1; i < 14; i++) {
 		suit: "spade",
 		value: i+1,
 		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			//collisionFilter: i,
+			collisionFilter: {
+				group: -1
+			},
 			inertia: Infinity,
 			onBoard: false,
 			render: {
@@ -83,7 +87,9 @@ for (let i = 1; i < 14; i++) {
 		suit: "club",
 		value: i+1,
 		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			//collisionFilter: i+13,
+			collisionFilter: {
+				group: -1
+			},
 			inertia: Infinity,
 			onBoard: false,
 			render: {
@@ -99,7 +105,9 @@ for (let i = 1; i < 14; i++) {
 		suit: "heart",
 		value: i+1,
 		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			//collisionFilter: i+26,
+			collisionFilter: {
+				group: -1
+			},
 			inertia: Infinity,
 			onBoard: false,
 			render: {
@@ -115,7 +123,9 @@ for (let i = 1; i < 14; i++) {
 		suit: "diamond",
 		value: i+1,
 		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			//collisionFilter: i+39,
+			collisionFilter: {
+				group: -1
+			},
 			inertia: Infinity,
 			onBoard: false,
 			render: {
@@ -135,6 +145,7 @@ let counter
 let counterArr = [];
 let counterBool = false;
 let shuffledDeck = [];
+let cardBeingDragged;
 
 for (let i = 0; i < deck.length; i++) {
 	counter = Math.floor(Math.random() * Math.floor(deck.length));
@@ -168,37 +179,61 @@ Render.lookAt(render, {
 });
 
 ///variables
-//mouse position object
-let mousePos = {
-	xPos: 0,
-	yPos: 0,
-};
-let hoverCard;
+//card being hovered by cursor
+let hoverCard = [];
+//bool for hover
+let hoverCardBool = false;
 
 //animation loop
 function cycle() {
 
-	//stores mouse position
-	document.onmousemove = event => {
-		mousePos.xPos = event.clientX;
-		mousePos.yPos = event.clientY;
-	};
+	//prevents the dragging of cards beneath the top one
+	for (let i = shuffledDeck.length-1; i > 0; i--) {
+		if (shuffledDeck[i].asset.collisionFilter.group === 1) {
+			for (let x = i-1; x > 0; x--) {
+				if (!shuffledDeck[x].asset.onBoard) {
+					Matter.Body.set(shuffledDeck[x].asset, {
+						collisionFilter: {
+							group: -1
+						}
+					})
+				}
+			}
+		}
+	}
+	
+	//allows for the dragging of the top card of the deck
+	for (let i = 0; i < shuffledDeck.length; i++) {
+		hoverCard = Matter.Query.point([shuffledDeck[i].asset], {
+			x: mouse.position.x,
+			y: mouse.position.y
+		});
+		if (hoverCard.length === 1) {
+			Matter.Body.set(hoverCard[0], {
+				collisionFilter: {
+					group: -1
+				}
+			})
+			hoverCard.onBoard = true;
+			break;
+		}
+	}
 	
 
 	requestAnimationFrame(cycle)
 }
 requestAnimationFrame(cycle)
 
-Events.on(mouseConstraint, "mousedown", function (event) {
-	console.log("hello")
+Events.on(mouseConstraint, "startdrag", function (event) {
+	event.body.onBoard = true;
+	event.body = cardBeingDragged;
 })
 Events.on(mouseConstraint, "mousemove", function (event) {
-	hoverCard = Matter.Query.point(engine.world, {
-		x: mousePos.xPos,
-		y: mousePos.yPos
-	});
-	console.log(hoverCard);
-}) 
+	
+})
+Events.on(mouseConstraint, "mousedownn", function (event) {
+	
+})
 
 // run the engine
 Engine.run(engine);
