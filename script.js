@@ -187,6 +187,10 @@ let hoverCardBool = false;
 //animation loop
 function cycle() {
 
+	for (let i = 0; i < shuffledDeck.length; i++) {
+		
+	}
+
 	//prevents the dragging of cards beneath the top one
 	for (let i = shuffledDeck.length-1; i > 0; i--) {
 		if (shuffledDeck[i].asset.collisionFilter.group === 1) {
@@ -208,12 +212,12 @@ function cycle() {
 			x: mouse.position.x,
 			y: mouse.position.y
 		});
+		if (hoverCard.length >= 1) {
+			for (let x = 0; x < hoverCard.length-1; x++) {
+				hoverCard.splice();
+			}
+		}
 		if (hoverCard.length === 1) {
-			Matter.Body.set(hoverCard[0], {
-				collisionFilter: {
-					group: -1
-				}
-			})
 			hoverCard.onBoard = true;
 			break;
 		}
