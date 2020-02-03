@@ -3,9 +3,9 @@ let Engine = Matter.Engine,
 	Render = Matter.Render,
 	World = Matter.World,
 	Runner = Matter.Runner,
+	Bounds = Matter.Bounds,
 	Bodies = Matter.Bodies,
 	Body = Matter.Body,
-	Bounds = Matter.Bounds,
 	Constraint = Matter.Constraint,
 	Events = Matter.Events,
 	MouseConstraint = Matter.MouseConstraint,
@@ -34,13 +34,60 @@ let	mouseConstraint = MouseConstraint.create(engine, {
 		group: 1
 	},	
 	constraint: {
-		stiffness: 0.0001,
+		stiffness: .2,
 		render: {
 			visible: false
 		}
 	}
 });
 World.add(engine.world, mouseConstraint);
+
+//create bodies for cards in hand
+hold1 = Matter.Bodies.rectangle(300, 650, 110, 150, {
+	collisionFilter: {
+		group: -1
+	},
+	isStatic: true,
+	render: {
+		fillStyle: "black",
+		lineWidth: 6,
+		strokeStlye: "red"
+	}
+})
+hold2 = Matter.Bodies.rectangle(450, 650, 110, 150, {
+	collisionFilter: {
+		group: -1
+	},
+	isStatic: true,
+	render: {
+		fillStyle: "black",
+		lineWidth: 6,
+		strokeStlye: "red"
+	}
+})
+hold3 = Matter.Bodies.rectangle(1000, 100, 110, 150, {
+	collisionFilter: {
+		group: -1
+	},
+	isStatic: true,
+	render: {
+		fillStyle: "black",
+		lineWidth: 6,
+		strokeStlye: "red"
+	}
+})
+hold4 = Matter.Bodies.rectangle(1150, 100, 110, 150, {
+	collisionFilter: {
+		group: -1
+	},
+	isStatic: true,
+	render: {
+		fillStyle: "black",
+		lineWidth: 6,
+		strokeStlye: "red"
+	}
+})
+World.add(engine.world, [hold1, hold2, hold3, hold4])
 
 //add keyboard input
 const keys = [];
@@ -187,10 +234,6 @@ let hoverCardBool = false;
 //animation loop
 function cycle() {
 
-	for (let i = 0; i < shuffledDeck.length; i++) {
-		
-	}
-
 	//prevents the dragging of cards beneath the top one
 	for (let i = shuffledDeck.length-1; i > 0; i--) {
 		if (shuffledDeck[i].asset.collisionFilter.group === 1) {
@@ -219,18 +262,69 @@ function cycle() {
 		}
 		if (hoverCard.length === 1) {
 			hoverCard.onBoard = true;
-			break;
+			break;	
 		}
 	}
 	
+	//body glues to holder
+	for (let i = 0; i < shuffledDeck.length; i++) {
+		if (shuffledDeck[i].asset.position.x <= hold1.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold1.bounds.min.x-5) {
+			if (shuffledDeck[i].asset.position.y <= hold1.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold1.bounds.min.y-5) {
+				Matter.Body.setPosition(shuffledDeck[i].asset, {
+					x: hold1.position.x,
+					y: hold1.position.y
+				})
+				Matter.Body.setVelocity(shuffledDeck[i].asset, {
+					x: 0,
+					y: 0
+				})
+			}
+		} 
+		if (shuffledDeck[i].asset.position.x <= hold2.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold2.bounds.min.x-5) {
+			if (shuffledDeck[i].asset.position.y <= hold2.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold2.bounds.min.y-5) {
+				Matter.Body.setPosition(shuffledDeck[i].asset, {
+					x: hold2.position.x,
+					y: hold2.position.y
+				})
+				Matter.Body.setVelocity(shuffledDeck[i].asset, {
+					x: 0,
+					y: 0
+				})
+			}
+		}
+		if (shuffledDeck[i].asset.position.x <= hold3.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold3.bounds.min.x-5) {
+			if (shuffledDeck[i].asset.position.y <= hold3.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold3.bounds.min.y-5) {
+				Matter.Body.setPosition(shuffledDeck[i].asset, {
+					x: hold3.position.x,
+					y: hold3.position.y
+				})
+				Matter.Body.setVelocity(shuffledDeck[i].asset, {
+					x: 0,
+					y: 0
+				})
+			}
+		}
+		if (shuffledDeck[i].asset.position.x <= hold4.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold4.bounds.min.x-5) {
+			if (shuffledDeck[i].asset.position.y <= hold4.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold4.bounds.min.y-5) {
+				Matter.Body.setPosition(shuffledDeck[i].asset, {
+					x: hold4.position.x,
+					y: hold4.position.y
+				})
+				Matter.Body.setVelocity(shuffledDeck[i].asset, {
+					x: 0,
+					y: 0
+				})
+			}
+		}
+	}
+
 
 	requestAnimationFrame(cycle)
 }
 requestAnimationFrame(cycle)
 
 Events.on(mouseConstraint, "startdrag", function (event) {
-	event.body.onBoard = true;
-	event.body = cardBeingDragged;
+	
 })
 Events.on(mouseConstraint, "mousemove", function (event) {
 	
