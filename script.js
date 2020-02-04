@@ -87,7 +87,60 @@ hold4 = Matter.Bodies.rectangle(1150, 100, 110, 150, {
 		strokeStlye: "red"
 	}
 })
-World.add(engine.world, [hold1, hold2, hold3, hold4])
+
+//cards in play
+table1 = Matter.Bodies.rectangle(500, 360, 110, 150, {
+	collisionFilter: {
+		group: -1
+	},
+	isStatic: true,
+	render: {
+		fillStyle: "black",
+		lineWidth: 6
+	}
+})
+table2 = Matter.Bodies.rectangle(650, 360, 110, 150, {
+	collisionFilter: {
+		group: -1
+	},
+	isStatic: true,
+	render: {
+		fillStyle: "black",
+		lineWidth: 6
+	}
+})
+table3 = Matter.Bodies.rectangle(800, 360, 110, 150, {
+	collisionFilter: {
+		group: -1
+	},
+	isStatic: true,
+	render: {
+		fillStyle: "black",
+		lineWidth: 6
+	}
+})
+table4 = Matter.Bodies.rectangle(950, 360, 110, 150, {
+	collisionFilter: {
+		group: -1
+	},
+	isStatic: true,
+	render: {
+		fillStyle: "black",
+		lineWidth: 6
+	}
+})
+table5 = Matter.Bodies.rectangle(1100, 360, 110, 150, {
+	collisionFilter: {
+		group: -1
+	},
+	isStatic: true,
+	render: {
+		fillStyle: "black",
+		lineWidth: 6
+	}
+})
+
+World.add(engine.world, [hold1, hold2, hold3, hold4, table1, table2, table3, table4, table5])
 
 //add keyboard input
 const keys = [];
@@ -230,6 +283,9 @@ Render.lookAt(render, {
 let hoverCard = [];
 //bool for hover
 let hoverCardBool = false;
+let p1hand = [];
+let p2hand = [];
+let tableHand = [];
 
 //animation loop
 function cycle() {
@@ -265,55 +321,254 @@ function cycle() {
 			break;	
 		}
 	}
+
+	//moves cards in hand to holder - player 1
+	if (p1hand.length > 0) {
+		if (p1hand[0].asset !== cardBeingDragged) {
+			Matter.Body.setVelocity(p1hand[0].asset, {
+				x: 0,
+				y: 0
+			})
+			Matter.Body.setPosition(p1hand[0].asset, {
+				x: hold1.position.x,
+				y: hold1.position.y
+			})
+		}
+	}
+	if (p1hand.length > 1) {
+		if (p1hand[1].asset !== cardBeingDragged) {
+			Matter.Body.setVelocity(p1hand[1].asset, {
+				x: 0,
+				y: 0
+			})
+			Matter.Body.setPosition(p1hand[1].asset, {
+				x: hold2.position.x,
+				y: hold2.position.y
+			})
+		}
+	}
+	//player2
+	if (p2hand.length > 0) {
+		if (p2hand[0].asset !== cardBeingDragged) {
+			Matter.Body.setVelocity(p2hand[0].asset, {
+				x: 0,
+				y: 0
+			})
+			Matter.Body.setPosition(p2hand[0].asset, {
+				x: hold3.position.x,
+				y: hold3.position.y
+			})
+		}
+	}
+	if (p2hand.length > 1) {
+		if (p2hand[1].asset !== cardBeingDragged) {
+			Matter.Body.setVelocity(p2hand[1].asset, {
+				x: 0,
+				y: 0
+			})
+			Matter.Body.setPosition(p2hand[1].asset, {
+				x: hold4.position.x,
+				y: hold4.position.y
+			})
+		}
+	}
+	//table
+	if (tableHand.length > 0) {
+		if (tableHand[0].asset !== cardBeingDragged) {
+			Matter.Body.setVelocity(tableHand[0].asset, {
+				x: 0,
+				y: 0
+			})
+			Matter.Body.setPosition(tableHand[0].asset, {
+				x: table1.position.x,
+				y: table1.position.y
+			})
+		}
+	}
+	if (tableHand.length > 1) {
+		if (tableHand[1].asset !== cardBeingDragged) {
+			Matter.Body.setVelocity(tableHand[1].asset, {
+				x: 0,
+				y: 0
+			})
+			Matter.Body.setPosition(tableHand[1].asset, {
+				x: table2.position.x,
+				y: table2.position.y
+			})
+		}
+	}
+	if (tableHand.length > 2) {
+		if (tableHand[2].asset !== cardBeingDragged) {
+			Matter.Body.setVelocity(tableHand[2].asset, {
+				x: 0,
+				y: 0
+			})
+			Matter.Body.setPosition(tableHand[2].asset, {
+				x: table3.position.x,
+				y: table3.position.y
+			})
+		}
+	}
+	if (tableHand.length > 3) {
+		if (tableHand[3].asset !== cardBeingDragged) {
+			Matter.Body.setVelocity(tableHand[3].asset, {
+				x: 0,
+				y: 0
+			})
+			Matter.Body.setPosition(tableHand[3].asset, {
+				x: table4.position.x,
+				y: table4.position.y
+			})
+		}
+	}
+	if (tableHand.length > 4) {
+		if (tableHand[4].asset !== cardBeingDragged) {
+			Matter.Body.setVelocity(tableHand[4].asset, {
+				x: 0,
+				y: 0
+			})
+			Matter.Body.setPosition(tableHand[4].asset, {
+				x: table5.position.x,
+				y: table5.position.y
+			})
+		}
+	}
 	
-	//body glues to holder
+	//card glues to holder
 	for (let i = 0; i < shuffledDeck.length; i++) {
-		if (shuffledDeck[i].asset.position.x <= hold1.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold1.bounds.min.x-5) {
-			if (shuffledDeck[i].asset.position.y <= hold1.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold1.bounds.min.y-5) {
-				Matter.Body.setPosition(shuffledDeck[i].asset, {
-					x: hold1.position.x,
-					y: hold1.position.y
-				})
-				Matter.Body.setVelocity(shuffledDeck[i].asset, {
-					x: 0,
-					y: 0
-				})
+		if (p1hand.length === 0) {
+			if (shuffledDeck[i].asset.position.x <= hold1.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold1.bounds.min.x-5) {
+				if (shuffledDeck[i].asset.position.y <= hold1.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold1.bounds.min.y-5) {
+					Matter.Body.setPosition(shuffledDeck[i].asset, {
+						x: hold1.position.x,
+						y: hold1.position.y
+					})
+					Matter.Body.setVelocity(shuffledDeck[i].asset, {
+						x: 0,
+						y: 0
+					})
+					p1hand.push(shuffledDeck[i]);
+				}
 			}
 		} 
-		if (shuffledDeck[i].asset.position.x <= hold2.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold2.bounds.min.x-5) {
-			if (shuffledDeck[i].asset.position.y <= hold2.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold2.bounds.min.y-5) {
-				Matter.Body.setPosition(shuffledDeck[i].asset, {
-					x: hold2.position.x,
-					y: hold2.position.y
-				})
-				Matter.Body.setVelocity(shuffledDeck[i].asset, {
-					x: 0,
-					y: 0
-				})
+		if (p1hand.length === 1) {
+			if (shuffledDeck[i].asset.position.x <= hold2.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold2.bounds.min.x-5) {
+				if (shuffledDeck[i].asset.position.y <= hold2.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold2.bounds.min.y-5) {
+					Matter.Body.setPosition(shuffledDeck[i].asset, {
+						x: hold2.position.x,
+						y: hold2.position.y
+					})
+					Matter.Body.setVelocity(shuffledDeck[i].asset, {
+						x: 0,
+						y: 0
+					})
+					p1hand.push(shuffledDeck[i]);
+				}
 			}
 		}
-		if (shuffledDeck[i].asset.position.x <= hold3.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold3.bounds.min.x-5) {
-			if (shuffledDeck[i].asset.position.y <= hold3.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold3.bounds.min.y-5) {
-				Matter.Body.setPosition(shuffledDeck[i].asset, {
-					x: hold3.position.x,
-					y: hold3.position.y
-				})
-				Matter.Body.setVelocity(shuffledDeck[i].asset, {
-					x: 0,
-					y: 0
-				})
+		if (p2hand.length === 0) {
+			if (shuffledDeck[i].asset.position.x <= hold3.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold3.bounds.min.x-5) {
+				if (shuffledDeck[i].asset.position.y <= hold3.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold3.bounds.min.y-5) {
+					Matter.Body.setPosition(shuffledDeck[i].asset, {
+						x: hold3.position.x,
+						y: hold3.position.y
+					})
+					Matter.Body.setVelocity(shuffledDeck[i].asset, {
+						x: 0,
+						y: 0
+					})
+					p2hand.push(shuffledDeck[i]);
+				}
 			}
 		}
-		if (shuffledDeck[i].asset.position.x <= hold4.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold4.bounds.min.x-5) {
-			if (shuffledDeck[i].asset.position.y <= hold4.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold4.bounds.min.y-5) {
-				Matter.Body.setPosition(shuffledDeck[i].asset, {
-					x: hold4.position.x,
-					y: hold4.position.y
-				})
-				Matter.Body.setVelocity(shuffledDeck[i].asset, {
-					x: 0,
-					y: 0
-				})
+		if (p2hand.length === 1) {
+			if (shuffledDeck[i].asset.position.x <= hold4.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold4.bounds.min.x-5) {
+				if (shuffledDeck[i].asset.position.y <= hold4.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold4.bounds.min.y-5) {
+					Matter.Body.setPosition(shuffledDeck[i].asset, {
+						x: hold4.position.x,
+						y: hold4.position.y
+					})
+					Matter.Body.setVelocity(shuffledDeck[i].asset, {
+						x: 0,
+						y: 0
+					})
+					p2hand.push(shuffledDeck[i]);
+				}
+			}
+		}
+		if (tableHand.length === 0) {
+			if (shuffledDeck[i].asset.position.x <= table1.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= table1.bounds.min.x-5) {
+				if (shuffledDeck[i].asset.position.y <= table1.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= table1.bounds.min.y-5) {
+					Matter.Body.setPosition(shuffledDeck[i].asset, {
+						x: table1.position.x,
+						y: table1.position.y
+					})
+					Matter.Body.setVelocity(shuffledDeck[i].asset, {
+						x: 0,
+						y: 0
+					})
+					tableHand.push(shuffledDeck[i]);
+				}
+			}
+		}
+		if (tableHand.length === 1) {
+			if (shuffledDeck[i].asset.position.x <= table2.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= table2.bounds.min.x-5) {
+				if (shuffledDeck[i].asset.position.y <= table2.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= table2.bounds.min.y-5) {
+					Matter.Body.setPosition(shuffledDeck[i].asset, {
+						x: table2.position.x,
+						y: table2.position.y
+					})
+					Matter.Body.setVelocity(shuffledDeck[i].asset, {
+						x: 0,
+						y: 0
+					})
+					tableHand.push(shuffledDeck[i]);
+				}
+			}
+		}
+		if (tableHand.length === 2) {
+			if (shuffledDeck[i].asset.position.x <= table3.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= table3.bounds.min.x-5) {
+				if (shuffledDeck[i].asset.position.y <= table3.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= table3.bounds.min.y-5) {
+					Matter.Body.setPosition(shuffledDeck[i].asset, {
+						x: table3.position.x,
+						y: table3.position.y
+					})
+					Matter.Body.setVelocity(shuffledDeck[i].asset, {
+						x: 0,
+						y: 0
+					})
+					tableHand.push(shuffledDeck[i]);
+				}
+			}
+		}
+		if (tableHand.length === 3) {
+			if (shuffledDeck[i].asset.position.x <= table4.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= table4.bounds.min.x-5) {
+				if (shuffledDeck[i].asset.position.y <= table4.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= table4.bounds.min.y-5) {
+					Matter.Body.setPosition(shuffledDeck[i].asset, {
+						x: table4.position.x,
+						y: table4.position.y
+					})
+					Matter.Body.setVelocity(shuffledDeck[i].asset, {
+						x: 0,
+						y: 0
+					})
+					tableHand.push(shuffledDeck[i]);
+				}
+			}
+		}
+		if (tableHand.length === 4) {
+			if (shuffledDeck[i].asset.position.x <= table5.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= table5.bounds.min.x-5) {
+				if (shuffledDeck[i].asset.position.y <= table5.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= table5.bounds.min.y-5) {
+					Matter.Body.setPosition(shuffledDeck[i].asset, {
+						x: table5.position.x,
+						y: table5.position.y
+					})
+					Matter.Body.setVelocity(shuffledDeck[i].asset, {
+						x: 0,
+						y: 0
+					})
+					tableHand.push(shuffledDeck[i]);
+				}
 			}
 		}
 	}
@@ -324,7 +579,10 @@ function cycle() {
 requestAnimationFrame(cycle)
 
 Events.on(mouseConstraint, "startdrag", function (event) {
-	
+	cardBeingDragged = event.body;
+})
+Events.on(mouseConstraint, "enddrag", function (event) {
+	cardBeingDragged = null;
 })
 Events.on(mouseConstraint, "mousemove", function (event) {
 	
