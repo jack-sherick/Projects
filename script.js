@@ -139,8 +139,34 @@ table5 = Matter.Bodies.rectangle(1100, 360, 110, 150, {
 		lineWidth: 6
 	}
 })
-
 World.add(engine.world, [hold1, hold2, hold3, hold4, table1, table2, table3, table4, table5])
+//chips
+let p1chips = [];
+for (let i = 0; i < 20; i++) {
+	if (i < 10) {
+		p1chips.push(Matter.Bodies.circle(790+(i*4), 700, 20, {
+			collisionFilter: {
+				group: 1
+			},
+			render: {
+				fillStyle: "blue",
+				lineWidth: 4
+			},
+		}))
+	}
+	else {
+		p1chips.push(Matter.Bodies.circle(790+(i*4), 740, 20, {
+			collisionFilter: {
+				group: 1
+			},
+			render: {
+				fillStyle: "blue",
+				lineWidth: 4
+			},
+		}))
+	}
+}
+World.add(engine.world, p1chips)
 
 //add keyboard input
 const keys = [];
@@ -286,6 +312,7 @@ let hoverCardBool = false;
 let p1hand = [];
 let p2hand = [];
 let tableHand = [];
+let gameState = 0;
 
 //animation loop
 function cycle() {
