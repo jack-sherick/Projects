@@ -10,6 +10,7 @@ let Engine = Matter.Engine,
 	Events = Matter.Events,
 	MouseConstraint = Matter.MouseConstraint,
 	Query = Matter.Query,
+	RenderPixi = Matter.RenderPixi,
 	Mouse = Matter.Mouse;
 
 // create an engine
@@ -25,6 +26,50 @@ let render = Render.create({
 	  height: window.innerHeight
     }
 });
+
+//pixi stuff
+let app = new PIXI.application({
+	width: window.innerWidth,
+	height: window.innerHeight
+})
+
+for (let i = 2; i < 10; i++) {
+	let x = i.toString();
+	PIXI.loader
+		.add("http://u.cubeupload.com/MajesticLime/" + x + "C.png")
+}
+for (let i = 2; i < 10; i++) {
+	let x = i.toString();
+	PIXI.loader
+		.add("http://u.cubeupload.com/MajesticLime/" + x + "D.png")
+}
+for (let i = 2; i < 10; i++) {
+	let x = i.toString();
+	PIXI.loader
+		.add("http://u.cubeupload.com/MajesticLime/" + x + "H.png")
+}
+for (let i = 2; i < 10; i++) {
+	let x = i.toString();
+	PIXI.loader
+		.add("http://u.cubeupload.com/MajesticLime/" + x + "S.png")
+}
+PIXI.loader
+	.add("http://u.cubeupload.com/MajesticLime/AS.png")
+	.add("http://u.cubeupload.com/MajesticLime/AD.png")
+	.add("http://u.cubeupload.com/MajesticLime/AH.png")
+	.add("http://u.cubeupload.com/MajesticLime/AC.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/JC.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/JD.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/JH.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/JS.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/KC.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/KD.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/KH.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/KS.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/QC.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/QD.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/QH.png")
+	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/QS.png")
 
 // add mouse input
 let mouse = Mouse.create(render.canvas)
@@ -140,13 +185,14 @@ table5 = Matter.Bodies.rectangle(1100, 360, 110, 150, {
 	}
 })
 World.add(engine.world, [hold1, hold2, hold3, hold4, table1, table2, table3, table4, table5])
+
 //chips
 let p1chips = [];
 for (let i = 0; i < 20; i++) {
 	if (i < 10) {
 		p1chips.push(Matter.Bodies.circle(790+(i*4), 700, 20, {
 			collisionFilter: {
-				group: 1
+				group: -1
 			},
 			render: {
 				fillStyle: "blue",
@@ -157,7 +203,7 @@ for (let i = 0; i < 20; i++) {
 	else {
 		p1chips.push(Matter.Bodies.circle(790+(i*4), 740, 20, {
 			collisionFilter: {
-				group: 1
+				group: -1
 			},
 			render: {
 				fillStyle: "blue",
@@ -167,6 +213,33 @@ for (let i = 0; i < 20; i++) {
 	}
 }
 World.add(engine.world, p1chips)
+
+let p2chips = [];
+for (let i = 0; i < 20; i++) {
+	if (i < 10) {
+		p2chips.push(Matter.Bodies.circle(400+(i*4), 100, 20, {
+			collisionFilter: {
+				group: -1
+			},
+			render: {
+				fillStyle: "blue",
+				lineWidth: 4
+			},
+		}))
+	}
+	else {
+		p2chips.push(Matter.Bodies.circle(400+(i*4), 140, 20, {
+			collisionFilter: {
+				group: -1
+			},
+			render: {
+				fillStyle: "blue",
+				lineWidth: 4
+			},
+		}))
+	}
+}
+World.add(engine.world, p2chips)
 
 //add keyboard input
 const keys = [];
