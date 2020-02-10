@@ -10,11 +10,11 @@ let Engine = Matter.Engine,
 	Events = Matter.Events,
 	MouseConstraint = Matter.MouseConstraint,
 	Query = Matter.Query,
-	RenderPixi = Matter.RenderPixi,
 	Mouse = Matter.Mouse;
 
 // create an engine
-let engine = Engine.create();
+let engine = Engine.create(),
+	world = engine.world;
 
 // create a renderer
 let render = Render.create({
@@ -26,50 +26,6 @@ let render = Render.create({
 	  height: window.innerHeight
     }
 });
-
-//pixi stuff
-let app = new PIXI.application({
-	width: window.innerWidth,
-	height: window.innerHeight
-})
-
-for (let i = 2; i < 10; i++) {
-	let x = i.toString();
-	PIXI.loader
-		.add("http://u.cubeupload.com/MajesticLime/" + x + "C.png")
-}
-for (let i = 2; i < 10; i++) {
-	let x = i.toString();
-	PIXI.loader
-		.add("http://u.cubeupload.com/MajesticLime/" + x + "D.png")
-}
-for (let i = 2; i < 10; i++) {
-	let x = i.toString();
-	PIXI.loader
-		.add("http://u.cubeupload.com/MajesticLime/" + x + "H.png")
-}
-for (let i = 2; i < 10; i++) {
-	let x = i.toString();
-	PIXI.loader
-		.add("http://u.cubeupload.com/MajesticLime/" + x + "S.png")
-}
-PIXI.loader
-	.add("http://u.cubeupload.com/MajesticLime/AS.png")
-	.add("http://u.cubeupload.com/MajesticLime/AD.png")
-	.add("http://u.cubeupload.com/MajesticLime/AH.png")
-	.add("http://u.cubeupload.com/MajesticLime/AC.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/JC.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/JD.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/JH.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/JS.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/KC.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/KD.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/KH.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/KS.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/QC.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/QD.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/QH.png")
-	.add("https://raw.githubusercontent.com/jack-sherick/Images/master/QS.png")
 
 // add mouse input
 let mouse = Mouse.create(render.canvas)
@@ -264,22 +220,52 @@ let deck = [{
 
 //passes values and bodies for the deck
 for (let i = 1; i < 14; i++) {
-	deck.push({
-		suit: "spade",
-		value: i+1,
-		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			collisionFilter: {
-				group: -1
-			},
-			inertia: Infinity,
-			onBoard: false,
-			render: {
-				fillStyle: "green",
-				lineWidth: 3,
-				strokeStlye: "black"
-			}
+	let x = i.toString();
+	if (i >= 2 && i <= 10) {
+		deck.push({
+			suit: "spade",
+			value: i+1,
+			asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
+				collisionFilter: {
+					group: -1
+				},
+				inertia: Infinity,
+				onBoard: false,
+				render: {
+					fillStyle: "green",
+					lineWidth: 3,
+					strokeStlye: "black",
+					sprite: {
+						texture: "https://raw.githubusercontent.com/jack-sherick/Images/master/" + x + "C.png",
+						xScale: .13,
+						yScale: .13	
+					}
+				}
+			})
 		})
-	})
+	}
+	else {
+		deck.push({
+			suit: "spade",
+			value: i+1,
+			asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
+				collisionFilter: {
+					group: -1
+				},
+				inertia: Infinity,
+				onBoard: false,
+				render: {
+					fillStyle: "green",
+					lineWidth: 3,
+					strokeStlye: "black",
+					sprite: {
+						xScale: .13,
+						yScale: .13	
+					}
+				}
+			})
+		})
+	}
 }
 for (let i = 1; i < 14; i++) {
 	deck.push({
@@ -338,6 +324,10 @@ for (let i = 1; i < 14; i++) {
 
 //removes blank card
 deck.splice(0, 1);
+
+for (let i = 0; i < deck.length; i++) {
+	Matter.Body
+}
 
 //shuffles the deck
 let counter
