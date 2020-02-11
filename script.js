@@ -218,12 +218,16 @@ let deck = [{
 	asset: null,
 }]
 
+//for face cards
+let face = "J"
+
 //passes values and bodies for the deck
 for (let i = 1; i < 14; i++) {
-	let x = i.toString();
-	if (i >= 2 && i <= 10) {
+	let x = i+1;
+	let y = x.toString()
+	if (i < 10) {
 		deck.push({
-			suit: "spade",
+			suit: "s",
 			value: i+1,
 			asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
 				collisionFilter: {
@@ -236,7 +240,7 @@ for (let i = 1; i < 14; i++) {
 					lineWidth: 3,
 					strokeStlye: "black",
 					sprite: {
-						texture: "https://raw.githubusercontent.com/jack-sherick/Images/master/" + x + "C.png",
+						texture: "https://raw.githubusercontent.com/jack-sherick/Images/master/" + y + "S.png",
 						xScale: .13,
 						yScale: .13	
 					}
@@ -245,8 +249,20 @@ for (let i = 1; i < 14; i++) {
 		})
 	}
 	else {
+		if (i === 10) {
+			face = "J"
+		}
+		if (i === 11) {
+			face = "Q"
+		}
+		if (i === 12) {
+			face = "K"
+		}
+		if (i === 13) {
+			face = "A"
+		}
 		deck.push({
-			suit: "spade",
+			suit: "s",
 			value: i+1,
 			asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
 				collisionFilter: {
@@ -259,6 +275,7 @@ for (let i = 1; i < 14; i++) {
 					lineWidth: 3,
 					strokeStlye: "black",
 					sprite: {
+						texture: "https://raw.githubusercontent.com/jack-sherick/Images/master//" + face + "S.png",
 						xScale: .13,
 						yScale: .13	
 					}
@@ -268,66 +285,194 @@ for (let i = 1; i < 14; i++) {
 	}
 }
 for (let i = 1; i < 14; i++) {
-	deck.push({
-		suit: "club",
-		value: i+1,
-		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			collisionFilter: {
-				group: -1
-			},
-			inertia: Infinity,
-			onBoard: false,
-			render: {
-				fillStyle: "green",
-				lineWidth: 3,
-				strokeStlye: "black"
-			}
+	let x = i+1;
+	let y = x.toString()
+	if (i < 10) {
+		deck.push({
+			suit: "c",
+			value: i+1,
+			asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
+				collisionFilter: {
+					group: -1
+				},
+				inertia: Infinity,
+				onBoard: false,
+				render: {
+					fillStyle: "green",
+					lineWidth: 3,
+					strokeStlye: "black",
+					sprite: {
+						texture: "https://raw.githubusercontent.com/jack-sherick/Images/master/" + y + "C.png",
+						xScale: .13,
+						yScale: .13	
+					}
+				}
+			})
 		})
-	})
+	}
+	else {
+		if (i === 10) {
+			face = "J"
+		}
+		if (i === 11) {
+			face = "Q"
+		}
+		if (i === 12) {
+			face = "K"
+		}
+		if (i === 13) {
+			face = "A"
+		}
+		deck.push({
+			suit: "c",
+			value: i+1,
+			asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
+				collisionFilter: {
+					group: -1
+				},
+				inertia: Infinity,
+				onBoard: false,
+				render: {
+					fillStyle: "green",
+					lineWidth: 3,
+					strokeStlye: "black",
+					sprite: {
+						texture: "https://raw.githubusercontent.com/jack-sherick/Images/master/" + face + "C.png",
+						xScale: .13,
+						yScale: .13	
+					}
+				}
+			})
+		})
+	}
 }
 for (let i = 1; i < 14; i++) {
-	deck.push({
-		suit: "heart",
-		value: i+1,
-		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			collisionFilter: {
-				group: -1
-			},
-			inertia: Infinity,
-			onBoard: false,
-			render: {
-				fillStyle: "green",
-				lineWidth: 3,
-				strokeStlye: "black"
-			}
+	let x = i+1;
+	let y = x.toString()
+	if (i < 10) {
+		deck.push({
+			suit: "h",
+			value: i+1,
+			asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
+				collisionFilter: {
+					group: -1
+				},
+				inertia: Infinity,
+				onBoard: false,
+				render: {
+					fillStyle: "green",
+					lineWidth: 3,
+					strokeStlye: "black",
+					sprite: {
+						texture: "https://raw.githubusercontent.com/jack-sherick/Images/master/" + y + "H.png",
+						xScale: .13,
+						yScale: .13	
+					}
+				}
+			})
 		})
-	})
+	}
+	else {
+		if (i === 10) {
+			face = "J"
+		}
+		if (i === 11) {
+			face = "Q"
+		}
+		if (i === 12) {
+			face = "K"
+		}
+		if (i === 13) {
+			face = "A"
+		}
+		deck.push({
+			suit: "h",
+			value: i+1,
+			asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
+				collisionFilter: {
+					group: -1
+				},
+				inertia: Infinity,
+				onBoard: false,
+				render: {
+					fillStyle: "green",
+					lineWidth: 3,
+					strokeStlye: "black",
+					sprite: {
+						texture: "https://raw.githubusercontent.com/jack-sherick/Images/master/" + face + "H.png",
+						xScale: .13,
+						yScale: .13	
+					}
+				}
+			})
+		})
+	}
 }
 for (let i = 1; i < 14; i++) {
-	deck.push({
-		suit: "diamond",
-		value: i+1,
-		asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
-			collisionFilter: {
-				group: -1
-			},
-			inertia: Infinity,
-			onBoard: false,
-			render: {
-				fillStyle: "green",
-				lineWidth: 1.5,
-				strokeStlye: "black"
-			}
+	let x = i+1;
+	let y = x.toString()
+	if (i < 10) {
+		deck.push({
+			suit: "d",
+			value: i+1,
+			asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
+				collisionFilter: {
+					group: -1
+				},
+				inertia: Infinity,
+				onBoard: false,
+				render: {
+					fillStyle: "green",
+					lineWidth: 3,
+					strokeStlye: "black",
+					sprite: {
+						texture: "https://raw.githubusercontent.com/jack-sherick/Images/master/" + y + "D.png",
+						xScale: .13,
+						yScale: .13	
+					}
+				}
+			})
 		})
-	})
+	}
+	else {
+		if (i === 10) {
+			face = "J"
+		}
+		if (i === 11) {
+			face = "Q"
+		}
+		if (i === 12) {
+			face = "K"
+		}
+		if (i === 13) {
+			face = "A"
+		}
+		deck.push({
+			suit: "d",
+			value: i+1,
+			asset: Matter.Bodies.rectangle(100, 100, 100, 140, {
+				collisionFilter: {
+					group: -1
+				},
+				inertia: Infinity,
+				onBoard: false,
+				render: {
+					fillStyle: "green",
+					lineWidth: 3,
+					strokeStlye: "black",
+					sprite: {
+						texture: "https://raw.githubusercontent.com/jack-sherick/Images/master/" + face + "D.png",
+						xScale: .13,
+						yScale: .13	
+					}
+				}
+			})
+		})
+	}
 }
 
 //removes blank card
 deck.splice(0, 1);
-
-for (let i = 0; i < deck.length; i++) {
-	Matter.Body
-}
 
 //shuffles the deck
 let counter
@@ -353,6 +498,13 @@ for (let i = 0; i < deck.length; i++) {
 	}
 }
 
+//create an array of the textures, for ease of access when changing later
+let textureArr = [];
+
+for (let i = 0; i < shuffledDeck.length; i++) {
+	textureArr.push(shuffledDeck[i].asset.render.sprite.texture)
+}
+
 //adds the deck to the world
 for (let i = 0; i < shuffledDeck.length; i++) {
 	World.add(engine.world, shuffledDeck[i].asset);
@@ -367,7 +519,7 @@ Render.lookAt(render, {
 	max: { x: window.innerWidth, y: window.innerHeight }
 });
 
-///variables
+//variables
 //card being hovered by cursor
 let hoverCard = [];
 //bool for hover
