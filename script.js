@@ -1,3 +1,11 @@
+//things to work on
+//buttons for drawing
+//more efficient dealnig with chips
+//collisions with chips
+//preload assets
+//game states, automated checking for who won
+//fixes, a lot of them
+
 // module aliases
 let Engine = Matter.Engine,
 	Render = Matter.Render,
@@ -498,11 +506,20 @@ for (let i = 0; i < deck.length; i++) {
 	}
 }
 
-//create an array of the textures, for ease of access when changing later
+//kinda bs way to preload textures - not working
+for (let i = 0; i < shuffledDeck.length; i++) {
+	World.add(engine.world, shuffledDeck[i].asset)
+}
+for (let i = 0; i < shuffledDeck.length; i++) {
+	World.remove(engine.world, shuffledDeck[i].asset)
+}
+
+//makes card blank and stores texture in array
 let textureArr = [];
 
 for (let i = 0; i < shuffledDeck.length; i++) {
 	textureArr.push(shuffledDeck[i].asset.render.sprite.texture)
+	shuffledDeck[i].asset.render.sprite.texture = "https://raw.githubusercontent.com/jack-sherick/Images/master/green_back.png"
 }
 
 //adds the deck to the world
@@ -519,6 +536,14 @@ Render.lookAt(render, {
 	max: { x: window.innerWidth, y: window.innerHeight }
 });
 
+//draw button
+drawButton = Matter.Bodies.rectangle(100, 300, 100, 50, {
+	isStatic: true,
+	render: {
+		fillStyle: "red"
+	}
+})
+
 //variables
 //card being hovered by cursor
 let hoverCard = [];
@@ -526,6 +551,8 @@ let hoverCard = [];
 let hoverCardBool = false;
 let p1hand = [];
 let p2hand = [];
+let p1Texture = [];
+let p2Texture = [];
 let tableHand = [];
 let gameState = 0;
 
@@ -681,60 +708,148 @@ function cycle() {
 		if (p1hand.length === 0) {
 			if (shuffledDeck[i].asset.position.x <= hold1.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold1.bounds.min.x-5) {
 				if (shuffledDeck[i].asset.position.y <= hold1.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold1.bounds.min.y-5) {
-					Matter.Body.setPosition(shuffledDeck[i].asset, {
-						x: hold1.position.x,
-						y: hold1.position.y
-					})
-					Matter.Body.setVelocity(shuffledDeck[i].asset, {
-						x: 0,
-						y: 0
-					})
-					p1hand.push(shuffledDeck[i]);
+					if (tableHand.length >= 1) {
+						for (let x = 0; x < tableHand.length; x++) {
+							if (tableHand[x].asset === shuffledDeck[i].asset) {
+								i + 100
+							}
+							if (x === tableHand.length) {
+								Matter.Body.setPosition(shuffledDeck[i].asset, {
+									x: hold1.position.x,
+									y: hold1.position.y
+								})	
+								Matter.Body.setVelocity(shuffledDeck[i].asset, {
+									x: 0,
+									y: 0
+								})
+								p1hand.push(shuffledDeck[i]);
+								p1Texture.push(textureArr[i]);
+							}
+						}
+					}
+					else {
+						Matter.Body.setPosition(shuffledDeck[i].asset, {
+							x: hold1.position.x,
+							y: hold1.position.y
+						})	
+						Matter.Body.setVelocity(shuffledDeck[i].asset, {
+							x: 0,
+							y: 0
+						})
+						p1hand.push(shuffledDeck[i]);
+						p1Texture.push(textureArr[i]);
+					}
 				}
 			}
 		} 
 		if (p1hand.length === 1) {
 			if (shuffledDeck[i].asset.position.x <= hold2.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold2.bounds.min.x-5) {
 				if (shuffledDeck[i].asset.position.y <= hold2.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold2.bounds.min.y-5) {
-					Matter.Body.setPosition(shuffledDeck[i].asset, {
-						x: hold2.position.x,
-						y: hold2.position.y
-					})
-					Matter.Body.setVelocity(shuffledDeck[i].asset, {
-						x: 0,
-						y: 0
-					})
-					p1hand.push(shuffledDeck[i]);
+					if (tableHand.length >= 1) {
+						for (let x = 0; x < tableHand.length; x++) {
+							if (tableHand[x].asset === shuffledDeck[i].asset) {
+								i + 100
+							}
+							if (x === tableHand.length) {
+								Matter.Body.setPosition(shuffledDeck[i].asset, {
+									x: hold2.position.x,
+									y: hold2.position.y
+								})	
+								Matter.Body.setVelocity(shuffledDeck[i].asset, {
+									x: 0,
+									y: 0
+								})
+								p1hand.push(shuffledDeck[i]);
+								p1Texture.push(textureArr[i]);
+							}
+						}
+					}
+					else {
+						Matter.Body.setPosition(shuffledDeck[i].asset, {
+							x: hold2.position.x,
+							y: hold2.position.y
+						})	
+						Matter.Body.setVelocity(shuffledDeck[i].asset, {
+							x: 0,
+							y: 0
+						})
+						p1hand.push(shuffledDeck[i]);
+						p1Texture.push(textureArr[i]);
+					}
 				}
 			}
 		}
 		if (p2hand.length === 0) {
 			if (shuffledDeck[i].asset.position.x <= hold3.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold3.bounds.min.x-5) {
 				if (shuffledDeck[i].asset.position.y <= hold3.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold3.bounds.min.y-5) {
-					Matter.Body.setPosition(shuffledDeck[i].asset, {
-						x: hold3.position.x,
-						y: hold3.position.y
-					})
-					Matter.Body.setVelocity(shuffledDeck[i].asset, {
-						x: 0,
-						y: 0
-					})
-					p2hand.push(shuffledDeck[i]);
+					if (tableHand.length >= 1) {
+						for (let x = 0; x < tableHand.length; x++) {
+							if (tableHand[x].asset === shuffledDeck[i].asset) {
+								i + 100
+							}
+							if (x === tableHand.length) {
+								Matter.Body.setPosition(shuffledDeck[i].asset, {
+									x: hold3.position.x,
+									y: hold3.position.y
+								})	
+								Matter.Body.setVelocity(shuffledDeck[i].asset, {
+									x: 0,
+									y: 0
+								})
+								p2hand.push(shuffledDeck[i]);
+								p2Texture.push(textureArr[i]);
+							}
+						}
+					}
+					else {
+						Matter.Body.setPosition(shuffledDeck[i].asset, {
+							x: hold3.position.x,
+							y: hold3.position.y
+						})	
+						Matter.Body.setVelocity(shuffledDeck[i].asset, {
+							x: 0,
+							y: 0
+						})
+						p2hand.push(shuffledDeck[i]);
+						p2Texture.push(textureArr[i]);
+					}
 				}
 			}
 		}
 		if (p2hand.length === 1) {
 			if (shuffledDeck[i].asset.position.x <= hold4.bounds.max.x+5 && shuffledDeck[i].asset.position.x >= hold4.bounds.min.x-5) {
 				if (shuffledDeck[i].asset.position.y <= hold4.bounds.max.y+5 && shuffledDeck[i].asset.position.y >= hold4.bounds.min.y-5) {
-					Matter.Body.setPosition(shuffledDeck[i].asset, {
-						x: hold4.position.x,
-						y: hold4.position.y
-					})
-					Matter.Body.setVelocity(shuffledDeck[i].asset, {
-						x: 0,
-						y: 0
-					})
-					p2hand.push(shuffledDeck[i]);
+					if (tableHand.length >= 1) {
+						for (let x = 0; x < tableHand.length; x++) {
+							if (tableHand[x].asset === shuffledDeck[i].asset) {
+								i + 100
+							}
+							if (x === tableHand.length) {
+								Matter.Body.setPosition(shuffledDeck[i].asset, {
+									x: hold4.position.x,
+									y: hold4.position.y
+								})	
+								Matter.Body.setVelocity(shuffledDeck[i].asset, {
+									x: 0,
+									y: 0
+								})
+								p2hand.push(shuffledDeck[i]);
+								p2Texture.push(textureArr[i]);
+							}
+						}
+					}
+					else {
+						Matter.Body.setPosition(shuffledDeck[i].asset, {
+							x: hold4.position.x,
+							y: hold4.position.y
+						})	
+						Matter.Body.setVelocity(shuffledDeck[i].asset, {
+							x: 0,
+							y: 0
+						})
+						p2hand.push(shuffledDeck[i]);
+						p2Texture.push(textureArr[i]);
+					}
 				}
 			}
 		}
@@ -750,6 +865,7 @@ function cycle() {
 						y: 0
 					})
 					tableHand.push(shuffledDeck[i]);
+					shuffledDeck[i].asset.render.sprite.texture = textureArr[i];
 				}
 			}
 		}
@@ -765,6 +881,7 @@ function cycle() {
 						y: 0
 					})
 					tableHand.push(shuffledDeck[i]);
+					shuffledDeck[i].asset.render.sprite.texture = textureArr[i];
 				}
 			}
 		}
@@ -780,6 +897,7 @@ function cycle() {
 						y: 0
 					})
 					tableHand.push(shuffledDeck[i]);
+					shuffledDeck[i].asset.render.sprite.texture = textureArr[i];
 				}
 			}
 		}
@@ -795,6 +913,7 @@ function cycle() {
 						y: 0
 					})
 					tableHand.push(shuffledDeck[i]);
+					shuffledDeck[i].asset.render.sprite.texture = textureArr[i];
 				}
 			}
 		}
@@ -810,9 +929,28 @@ function cycle() {
 						y: 0
 					})
 					tableHand.push(shuffledDeck[i]);
+					shuffledDeck[i].asset.render.sprite.texture = textureArr[i];
 				}
 			}
 		}
+	}
+
+	//keyboard to reveal player hands
+	if (keys[32] && p1hand.length > 1) {
+		p1hand[0].asset.render.sprite.texture = p1Texture[0]
+		p1hand[1].asset.render.sprite.texture = p1Texture[1]
+	}
+	if (!keys[32] && p1hand.length > 1) {
+		p1hand[0].asset.render.sprite.texture = "https://raw.githubusercontent.com/jack-sherick/Images/master/green_back.png"
+		p1hand[1].asset.render.sprite.texture = "https://raw.githubusercontent.com/jack-sherick/Images/master/green_back.png"
+	}
+	if (keys[16] && p2hand.length > 1) {
+		p2hand[0].asset.render.sprite.texture = p2Texture[0]
+		p2hand[1].asset.render.sprite.texture = p2Texture[1]
+	}
+	if (!keys[16] && p2hand.length > 1) {
+		p2hand[0].asset.render.sprite.texture = "https://raw.githubusercontent.com/jack-sherick/Images/master/green_back.png"
+		p2hand[1].asset.render.sprite.texture = "https://raw.githubusercontent.com/jack-sherick/Images/master/green_back.png"
 	}
 
 
@@ -826,11 +964,8 @@ Events.on(mouseConstraint, "startdrag", function (event) {
 Events.on(mouseConstraint, "enddrag", function (event) {
 	cardBeingDragged = null;
 })
-Events.on(mouseConstraint, "mousemove", function (event) {
-	
-})
 Events.on(mouseConstraint, "mousedownn", function (event) {
-	
+	console.log(event.body)
 })
 
 // run the engine
