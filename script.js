@@ -544,6 +544,12 @@ drawButton = Matter.Bodies.rectangle(100, 300, 100, 50, {
 	}
 })
 
+//bounds for placement of chips  57.5, 382.5, 195, 545
+bound = Matter.Bounds.create(render, {
+	min: {x: 57.5, y: 382.5},
+	max: {x: 195, y: 545}
+})
+
 //variables
 //card being hovered by cursor
 let hoverCard = [];
@@ -1173,6 +1179,11 @@ Events.on(mouseConstraint, "startdrag", function (event) {
 })
 Events.on(mouseConstraint, "enddrag", function (event) {
 	cardBeingDragged = null;
+	for (let i = 0; i < p1chips.length; i++) {
+		if (event.body === p1chips[i]) {
+			
+		}
+	}
 })
 Events.on(mouseConstraint, "mousedownn", function (event) {
 	console.log(event.body)
